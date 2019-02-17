@@ -13,26 +13,37 @@ import { MatTableModule, MatButtonModule,
          MatMenuModule, MatIconModule,
           MatListModule, MatPaginatorModule, 
           MatCardModule, MatProgressSpinnerModule, 
-          MatProgressBarModule, MatButtonToggleModule } from '@angular/material';
+          MatProgressBarModule, MatButtonToggleModule, MatBottomSheet, MatBottomSheetRef, MatBottomSheetContainer, MatBottomSheetModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { DictionaryService } from './services/rest/dictionary-service';
+import { HttpModule } from '@angular/http';
+import { WarningComponent } from './ui/warning/warning.component';
+import { OperatorComponent } from './ui/operator/operator.component';
+import { SupplierComponent, WarningSupplier } from './ui/supplier/supplier.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    WarningComponent,
+    OperatorComponent,
+    SupplierComponent,
+    WarningSupplier
+  ],
+  entryComponents: [
+    WarningSupplier
   ],
   imports: [
     BrowserModule,BrowserAnimationsModule,FormsModule,HttpClientModule,
-    // RouterModule.forRoot([
-      // {path: 'map', component: MapComponent},]),
     MatDialogModule,MatButtonModule,MatInputModule,MatCheckboxModule,MatTabsModule,MatSortModule,MatExpansionModule,
     MatMenuModule,MatIconModule,MatListModule,MatMenuModule,MatTableModule,MatPaginatorModule,MatSortModule,MatCardModule,
     MatProgressSpinnerModule, MatProgressBarModule, MatButtonToggleModule, MatTableModule, MatButtonModule,
-    AppRoutingModule
+    AppRoutingModule, HttpModule, MatBottomSheetModule
   ],
-  providers: [SocketService],
+  providers: [SocketService, DictionaryService, MatBottomSheet],
   bootstrap: [AppComponent]
+  
 })
 export class AppModule { }

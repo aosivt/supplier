@@ -1,0 +1,11 @@
+<mat-card>
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Номер заказа" [(ngModel)]="numOrder">
+    </mat-form-field>
+    
+    <div class="button-row" align="right">
+        <button #addButton mat-fab color="primary" (click)="postCanceledOrder()" style="font-size: 150%;">+</button>
+    </div>
+</mat-card>
+
+

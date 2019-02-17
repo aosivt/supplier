@@ -6,51 +6,57 @@ import * as socketIo from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { AbstractSocketService } from './abstract-socket-service';
 import { AppComponent } from 'src/app/app.component';
+import { Action } from './action';
 
 
 export class SocketService extends AbstractSocketService {
 
-    public mainComponent;
-    
-    sendMessage(message){
-        var messageContent = message;
-        if(messageContent && this.stompClient) {
-            var chatMessage = {
-                sender: this.userName,
-                content: message,
-                type: 'CHAT'
-            };
-            this.stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
-            message = '';
-        }
-        event.preventDefault();
-        // alert(this.testMessage);
-    }
+    public component;
     
     public getSelectedOrders(){
         this.stompClient.send("/app/selectOrders",{},JSON.stringify({sender: this.userName, type: 'APPEND'}));
     }
-
-    public setResponce(result){
-        result.forEach(element => {
-            this.mainComponent.canceledOrders.push(
-                {position: element.id+10,name: element.order.orderNum,weight:"",symbol:""}
-            );    
-        });
-        this.mainComponent.refreshData();
+    public postCanceldOrder(orderNumText){
+        this.stompClient.send("/app/canceledOrder",{}, this.getRequestSocket(orderNumText));
     }
 
-    public setCanceledOrders(mainComponent){
-        this.mainComponent = mainComponent;
+    public setResponce(result: ResponseSocket) {
+        this.component.refreshData(result);
+    }
+
+    public setForm(component){
+        this.component = component;
+    }
+
+    private getRequestSocket(orderNumText){
+        const request = {} as RequestSocket;
+        request.orderNum = orderNumText;
+        request.numUser = this.userName;
+        request.action = Action.SAVE;
+        return JSON.stringify(request);
     }
 }
-export  interface CanceldOrder {
+
+export interface RequestSocket{
+    numUser:string;
+    orderNum:string;
+    action:Action;
+}
+export interface ResponseSocket{
+    message: string;
+    dictionary: CanceledOrder;
+    action: Action;
+    numUser: string;
+}
+
+export interface CanceledOrder {
     cancelDate: Date;
     id: number;
     orderId: number;
     symbol: string;
     order: Order;
   }
+
   export interface Order {
     id: number;
     orderNum: string;

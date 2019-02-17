@@ -2,7 +2,8 @@
 export enum Action {
     JOINED,
     LEFT,
-    RENAME
+    RENAME,
+    SAVE = 'SAVE'
 }
 
 // Socket.io events
