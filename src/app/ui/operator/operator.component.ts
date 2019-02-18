@@ -11,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./operator.component.css']
 })
 export class OperatorComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name'];
+  displayedColumns: string[] = ['orderId', 'orderNum', 'cancelDate'];
   public canceledOrders = [];
   dataSource;
 
@@ -40,6 +40,7 @@ export class OperatorComponent implements OnInit {
     .pipe(
         map(
           result => {
+            console.log(result);
             this.setResponce(result);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -53,7 +54,7 @@ export class OperatorComponent implements OnInit {
   public refreshData(result: ResponseSocket) {
     if (result.dictionary != null){
       this.canceledOrders.push(
-        {position: result.dictionary.id + 10, name: result.dictionary.order.orderNum }
+        {orderId: result.dictionary.id, orderNum: result.dictionary.order.orderNum, cancelDate: new Date(result.dictionary.cancelDate).toLocaleString() }
       );
       this.dataSource = this.getMatTableDirectory(this.canceledOrders);
       this.dataSource.paginator = this.paginator;
@@ -64,8 +65,12 @@ export class OperatorComponent implements OnInit {
 
 public setResponce(result){
   this.canceledOrders = result.map(
-    element => ({position: element.id + 10, name: element.order.orderNum })
+    element => (
+      {orderId: element.order.id,
+        orderNum: element.order.orderNum,
+        cancelDate: new Date(element.cancelDate).toLocaleString() })
     );
+    console.log(this.canceledOrders);
     this.dataSource = this.getMatTableDirectory(this.canceledOrders);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
